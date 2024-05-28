@@ -2,13 +2,32 @@ import { Hono } from 'hono'
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { decode, sign, verify } from 'hono/jwt'
+import { env } from 'hono/adapter';
 
 const app = new Hono<{
   Bindings: {
-    DATABASE_URL: string,
     SECRET: string,
+    DATABASE_URL: string
   }
 }>();
+
+app.use('api/v1/blog/*', async (c, next) => {
+  // get the header
+  // verify the header
+  // if heaader is correct, proceed 
+  // if not, return 403
+
+  const user = c.req.header;
+
+
+
+
+})
+
+
+app.post('/haha', (c) => {
+  return c.text('haha')
+})
 
 app.post('/api/v1/signup', async (c) => {
 
@@ -35,9 +54,10 @@ app.post('/api/v1/signup', async (c) => {
     if(!user) { 
         return c.text('user not created') 
     }
+    
     console.log('SECRET:', c.env.SECRET);
     console.log('DATABASE:', c.env.DATABASE_URL);
-    //@ts-ignore
+    
     const token = await sign({ id: user.id }, c.env.SECRET) 
     return c.json({ jwt: token })
   } catch (error) {
@@ -52,8 +72,7 @@ app.post('/api/v1/signup', async (c) => {
 app.post('/api/v1/signin', async (c) => {
 
   const prisma = new PrismaClient({
-    //@ts-ignore
-    datasourceUrl: env.DATABASE_URL,
+    datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
 
   const body = await c.req.json();
@@ -71,7 +90,7 @@ app.post('/api/v1/signin', async (c) => {
     })
   }
   //@ts-ignore
-  const jwt = await sign({ id: user.id }, c.env.JWT_SECRET)
+  const jwt = await sign({ id: user.id }, c.env.SECRET)
   return c.json({ jwt }); 
 })
 
