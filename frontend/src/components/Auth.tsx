@@ -17,7 +17,7 @@ const Auth = ({type}: {type: "signup" | "signin"}) => {
                         Create an account
                     </div>
                     <div className="text-slate-400">
-                          Already have an account?
+                          {type === "signup" ? "Already have an account?" : "Don't have an account?"}
                         <Link to={"/signin"} className="pl-2 underline">Login</Link>
                     </div>
                 </div>
@@ -27,19 +27,21 @@ const Auth = ({type}: {type: "signup" | "signin"}) => {
                             ...postInputs,
                             name: e.target.value
                         })
-                    }}></LabelledInput>
+                    }}></LabelledInput><br />
                     <LabelledInput label="Email" placeholder="zaidkhan@gmail.com" onChange={(e) => {
                         setPostInputs({
                             ...postInputs,
                             email: e.target.value
                         })
-                    }}></LabelledInput>
+                    }}></LabelledInput><br />
                     <LabelledInput label="Password" type={"password"} placeholder="********" onChange={(e) => {
                         setPostInputs({
                             ...postInputs,
                             password: e.target.value
                         })
-                    }}></LabelledInput>
+                    }}></LabelledInput><br />
+                    <button type="button" className="text-white w-full bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">{type === "signup" ? "Sign Up" : "Sign In"}</button>
+
                 </div>
             </div>
         </div>
@@ -52,11 +54,11 @@ interface LabelledInputType {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     type?: string
 }
-const LabelledInput = ({label, placeholder, onChange}:LabelledInputType) => {
+const LabelledInput = ({label, placeholder, onChange, type}:LabelledInputType) => {
     return <div>
         <div>
-            <label className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">{label}</label>
-            <input onChange={onChange} type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder={placeholder} required />
+            <label className="block mb-2 text-sm font-bold text-gray-900 dark:text-black">{label}</label>
+            <input onChange={onChange} type={type || "text"} id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder={placeholder} required />
         </div>
         
     </div>
