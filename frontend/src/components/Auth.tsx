@@ -1,14 +1,31 @@
 import { SignupInput } from "@fuyofulo/medium-clone-common";
 import { ChangeEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios"; 
+import { BACKEND_URL } from "../config";
 
 const Auth = ({type}: {type: "signup" | "signin"}) => {
 
+        const navigate = useNavigate();
     const [postInputs, setPostInputs] = useState<SignupInput>({
         name: "",
         email: "",
         password: ""
     });
+
+    async function sendRequest() {
+        try {
+            const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, postInputs);
+            const jwt = response.data;
+            console.log(response);
+            localStorage.setItem("token", jwt);
+            navigate("/home");
+        } catch (e) {
+            alert(type === "signup" ? "Error signing up" : "Invalid email or password");
+            console.log(e); 
+        }
+    }
+
     return <div className="h-screen flex justify-center">
         <div className="flex justify-center flex-col w-full lg:w-3/4">
             <div className="w-full">
@@ -43,7 +60,7 @@ const Auth = ({type}: {type: "signup" | "signin"}) => {
                                 password: e.target.value
                             })
                         }}></LabelledInput><br />
-                        <button type="button" className="text-white w-full bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">{type === "signup" ? "Sign Up" : "Login"}</button>
+                        <button onClick={sendRequest} type="button" className="text-white w-full bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">{type === "signup" ? "Sign Up" : "Login"}</button>
                     </div>
                 </div>
             </div>
