@@ -19,7 +19,7 @@ const Auth = ({type}: {type: "signup" | "signin"}) => {
             const jwt = response.data;
             console.log(response);
             localStorage.setItem("token", jwt);
-            navigate("/home");
+            navigate("/blogs");
         } catch (e) {
             alert(type === "signup" ? "Error signing up" : "Invalid email or password");
             console.log(e); 
