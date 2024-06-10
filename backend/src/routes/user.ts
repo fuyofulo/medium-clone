@@ -44,14 +44,14 @@ userRouter.post("/signup", async (c) => {
 
   try {
     const user = await prisma.user.create({
-      data: { email: body.email, password: body.password },
+      data: { email: body.email, password: body.password, name: body.name},
     });
     if (!user) {
       return c.text("user not created");
     }
 
-    const token = await sign({ id: user.id }, c.env.SECRET);
-    return c.json({ jwt: token });
+    const jwt = await sign({ id: user.id }, c.env.SECRET);
+    return c.json({ jwt, user });
   } catch (error) {
     console.error(error);
     if (error) {
@@ -76,7 +76,6 @@ userRouter.post("/signin", async (c) => {
       password: body.password,
     },
   });
-
 
   if (!user) {
     c.status(505);
