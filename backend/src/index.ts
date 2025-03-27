@@ -15,7 +15,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://my-app.pheonixdiaz625.workers.dev",
+      "https://medium-clone-six-livid.vercel.app",
     ],
     allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE"],
     allowHeaders: ["Content-Type", "Authorization"],
