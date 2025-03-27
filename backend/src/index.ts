@@ -16,6 +16,8 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://medium-clone-six-livid.vercel.app",
+      "https://medium-clone-git-main-fuyofulo-613da217.vercel.app/",
+      "https://medium-clone-i63rojrb6-fuyofulo-613da217.vercel.app/"
     ],
     allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE"],
     allowHeaders: ["Content-Type", "Authorization"],
