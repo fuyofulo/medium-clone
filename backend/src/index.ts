@@ -10,15 +10,25 @@ const app = new Hono<{
   };
 }>();
 
+// CORS middleware with dynamic origin handling
 app.use(
   "/*",
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://medium-clone-six-livid.vercel.app",
-      "https://medium-clone-git-main-fuyofulo-613da217.vercel.app/",
-      "https://medium-clone-i63rojrb6-fuyofulo-613da217.vercel.app/"
-    ],
+    origin: (origin) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return "*";
+
+      // Allow localhost and Vercel deployments
+      if (
+        origin.includes("localhost") ||
+        origin.includes("medium-clone") ||
+        origin.endsWith(".vercel.app")
+      ) {
+        return origin;
+      }
+
+      return null; // Block other origins
+    },
     allowMethods: ["POST", "GET", "OPTIONS", "PUT", "DELETE"],
     allowHeaders: ["Content-Type", "Authorization"],
     exposeHeaders: ["Content-Length", "X-Kuma-Revision"],
